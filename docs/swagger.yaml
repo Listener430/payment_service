@@ -1,0 +1,86 @@
+basePath: /api/v1
+definitions:
+  models.PurchaseReq:
+    properties:
+      receiptData:
+        type: string
+      userId:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Verifies Apple purchases and manages user features
+  title: Apple Purchase Verification API
+  version: "1.0"
+paths:
+  /check:
+    get:
+      description: Returns user feature state
+      parameters:
+      - description: User ID
+        in: query
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: bad request
+          schema:
+            type: string
+        "404":
+          description: not found
+          schema:
+            type: string
+      summary: Checks user feature
+      tags:
+      - Purchase
+  /purchase:
+    post:
+      consumes:
+      - application/json
+      description: Verifies Apple in-app purchase, unlocks feature
+      parameters:
+      - description: purchase
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/models.PurchaseReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: unlocked
+          schema:
+            type: string
+        "400":
+          description: bad request
+          schema:
+            type: string
+        "401":
+          description: unauthorized
+          schema:
+            type: string
+        "500":
+          description: database operation failed
+          schema:
+            type: string
+      summary: Apple purchase
+      tags:
+      - Purchase
+schemes:
+- http
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

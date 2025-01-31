@@ -1,0 +1,42 @@
+version: '3'
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    container_name: db_svc
+    environment:
+      POSTGRES_USER: usr
+      POSTGRES_PASSWORD: pwd
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
+
+  payment_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: payment_svc
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      JWT_SECRET: "your_jwt_secret"
+      JWT_REFRESH: "your_jwt_refresh_secret"
+      FRONTEND_BASE_URL: "http://localhost:3000"
+      DATABASE_HOST: "db"
+      DATABASE_PORT: "5432"
+      DATABASE_USERNAME: "usr"
+      DATABASE_PASSWORD: "pwd"
+      DATABASE_NAME: "appdb"
+      DATABASE_SSLMODE: "disable"
+      ORIGIN: "http://localhost:3000"
+      SMTP_USER_NAME: "your_smtp_username"
+      SMTP_PASSWORD: "your_smtp_password"
+      SMTP_HOST: "smtp.example.com"
+      SMTP_PORT: "587"
+      SMTP_FROM_NAME: "Your Service"
+      SMTP_FROM_EMAIL: "no-reply@example.com"
+      HEALTH_TO_EMAIL: "health@example.com"
+      HEALTH_TO_NAME: "Health Team"

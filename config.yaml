@@ -1,0 +1,43 @@
+jwt_secret: "your_jwt_secret"
+jwt_refresh_token_secret: "your_jwt_refresh_secret"
+session_length: 8086
+port: 8080
+frontend_base_url: "http://localhost:3000"
+
+database:
+  host: "db"                     # Hostname of the Postgres service in Docker
+  port: 5432                    # Default Postgres port
+  username: "usr"               # As defined in docker-compose.yml
+  password: "pwd"               # As defined in docker-compose.yml
+  dbname: "appdb"               # As defined in docker-compose.yml
+  sslmode: "disable"
+
+public_routes:
+  - "post@/api/v1/purchase"
+  - "get@/api/v1/check"
+  - "get@/api/v1/swagger/*"
+
+origins:
+  - "http://localhost:3000"
+
+mail:
+  ses_username: "your_smtp_username"
+  ses_password: "your_smtp_password"
+  ses_host: "smtp.example.com"
+  ses_port: "587"
+  from_name: "Your Service"
+  from_email: "no-reply@example.com"
+  templates_dir: "./mail_templates/"
+
+health:
+  email_to: "health@example.com"
+  email_to_name: "Health Team"
+
+log:
+  path: "./logs/"
+  max_size: 10
+  rotate: 30
+
+limiter:
+  rate: 100
+  burst: 50
